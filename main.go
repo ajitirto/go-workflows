@@ -10,6 +10,6 @@ func Hello() error {
 }
 
 func main() {
-	Hello() 
+	Hello()
 	fmt.Printf("version: %s\n", BuildVersion)
 }

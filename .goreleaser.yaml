@@ -1,0 +1,39 @@
+version: 2
+before:
+  hooks:
+    - go mod tidy
+project_name: go-ci-demo
+builds:
+  - binary: my-app
+    env:
+      - CGO_ENABLED=0
+    dir: .
+    ldflags:
+      - -s -w
+      - -X "main.BuildVersion={{.Tag}}"
+    goos:
+      - linux
+      - darwin
+      - windows
+      - freebsd
+archives:
+  - files:
+      - README.md
+      - LICENSE
+    name_template: >-
+      {{- .ProjectName }}_
+      {{- title .Os }}_
+      {{- if eq .Arch "amd64" }}x86_64
+      {{- else if eq .Arch "386" }}i386
+      {{- else }}{{ .Arch }}{{ end }}
+      {{- if .Arm }}v{{ .Arm }}{{ end -}}
+checksum:
+  name_template: 'checksums.txt'
+snapshot:
+  version_template: "{{ incpatch .Version }}-next"
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'

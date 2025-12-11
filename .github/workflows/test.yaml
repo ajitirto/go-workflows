@@ -36,6 +36,7 @@ jobs:
           sarif_file: ./linter-results.sarif
 
   test:
+    needs : lint
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
